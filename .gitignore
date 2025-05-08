@@ -1,0 +1,22 @@
+# Ignorar arquivos temporários do Visual Studio
+.vs/
+.vscode/
+.idea/
+
+# Ignorar binários gerados
+/bin/
+obj/
+
+# Ignorar arquivos de compilação
+*.dll
+*.exe
+*.pdb
+*.log
+
+# Ignorar arquivos de configuração locais
+appsettings.Development.json
+
+# Ignorar arquivos do usuário
+*.user
+*.userosscache
+*.suo
