@@ -19,9 +19,13 @@ namespace WebApi.Controllers
 
 
         [HttpPost]
-        public IActionResult Add(EmployeeViewModel employeeView)
+        public IActionResult Add([FromForm]EmployeeViewModel employeeView)
         {
-            var employee = new Employee(employeeView.Name, employeeView.Age, "sem foto");
+            var filePath = Path.Combine("Storage", employeeView.Photo.FileName);
+            using Stream fileStream = new FileStream(filePath, FileMode.Create);//arquivos
+            employeeView.Photo.CopyTo(fileStream);//salva o arquivo na pasta Storage
+
+            var employee = new Employee(employeeView.Name, employeeView.Age, filePath);
             _employeeRepository.Add(employee);
             return Ok();
         }
@@ -32,5 +36,18 @@ namespace WebApi.Controllers
             var employess = _employeeRepository.Get();
             return Ok(employess);
         }
+
+
+        [HttpPost]
+        [Route("{id}/download")]
+        public IActionResult DownloadPhoto(int id)
+        {
+            var employee = _employeeRepository.Get(id);
+            var dataBytes = System.IO.File.ReadAllBytes(employee.photo);
+
+            return File(dataBytes, "image/png");
+
+        }
+
     }
 }
