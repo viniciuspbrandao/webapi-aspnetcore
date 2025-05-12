@@ -12,10 +12,12 @@ namespace WebApi.Controllers
     {
 
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly ILogger<EmployeeController> _logger;
 
-        public EmployeeController(IEmployeeRepository employeeRepository)
+        public EmployeeController(IEmployeeRepository employeeRepository, ILogger<EmployeeController> logger)
         {
-            _employeeRepository = employeeRepository ?? throw new ArgumentNullException();
+            _employeeRepository = employeeRepository ?? throw new ArgumentNullException(nameof(employeeRepository));
+            _logger = logger;
         }
 
         
@@ -36,7 +38,9 @@ namespace WebApi.Controllers
         [HttpGet]
         public IActionResult Get(int pageNumber, int pageQuantity)
         {
+            _logger.Log(LogLevel.Error, "Erro"); //exemplo de como adicionar log de erro
             var employess = _employeeRepository.Get(pageNumber, pageQuantity);
+            _logger.LogInformation("Executando metodo get com paginacao");
             return Ok(employess);
         }
 
