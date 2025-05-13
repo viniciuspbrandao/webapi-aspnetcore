@@ -39,6 +39,7 @@ namespace WebApi.Controllers
         public IActionResult Get(int pageNumber, int pageQuantity)
         {
             _logger.Log(LogLevel.Error, "Erro"); //exemplo de como adicionar log de erro
+            throw new Exception("Erro de teste");//lancando erro para exemplificar a chamada
             var employess = _employeeRepository.Get(pageNumber, pageQuantity);
             _logger.LogInformation("Executando metodo get com paginacao");
             return Ok(employess);
