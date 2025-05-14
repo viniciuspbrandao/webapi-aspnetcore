@@ -20,3 +20,6 @@ appsettings.Development.json
 *.user
 *.userosscache
 *.suo
+
+# Ignorar arquivo com a estrutura em arvore do projeto
+structure.txt

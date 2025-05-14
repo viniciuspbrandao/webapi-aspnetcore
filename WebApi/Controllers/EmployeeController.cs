@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Application.ViewModel;
 using WebApi.Domain.Model;
+using WebApi.Domain.DTOs;
 
 namespace WebApi.Controllers
 {
@@ -13,11 +15,13 @@ namespace WebApi.Controllers
 
         private readonly IEmployeeRepository _employeeRepository;
         private readonly ILogger<EmployeeController> _logger;
+        private readonly IMapper _mapper;
 
-        public EmployeeController(IEmployeeRepository employeeRepository, ILogger<EmployeeController> logger)
+        public EmployeeController(IEmployeeRepository employeeRepository, ILogger<EmployeeController> logger, IMapper mapper)
         {
-            _employeeRepository = employeeRepository ?? throw new ArgumentNullException(nameof(employeeRepository));
+            _employeeRepository = employeeRepository;
             _logger = logger;
+            _mapper = mapper;
         }
 
         
@@ -56,6 +60,17 @@ namespace WebApi.Controllers
 
             return File(dataBytes, "image/png");
 
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("{id}")]
+        public IActionResult Search(int id)
+        {
+            _logger.LogInformation("Executando metodo de busca por id, e fazendo o mapeamento da Entidade para o DTO");
+            var employess = _employeeRepository.Get(id);
+            var employeesDTOs = _mapper.Map<EmployeeDTO>(employess);
+            return Ok(employess);
         }
 
     }
